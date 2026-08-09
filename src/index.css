@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Same brand accent as the organizer dashboard. */
+  --color-brand: #7c3aed;
+  --color-brand-dark: #6d28d9;
+  --color-brand-light: #f5f3ff;
+
+  /* Door-result states — must read at a glance, color+icon, no text required. */
+  --color-admit: #16a34a;
+  --color-admit-dark: #15803d;
+  --color-admit-light: #f0fdf4;
+  --color-already: #d97706;
+  --color-already-dark: #b45309;
+  --color-already-light: #fffbeb;
+  --color-refuse: #dc2626;
+  --color-refuse-dark: #b91c1c;
+  --color-refuse-light: #fef2f2;
+
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-gray-900 antialiased;
+  /* Stop iOS Safari from auto-inflating text in landscape. */
+  -webkit-text-size-adjust: 100%;
+  /* No pull-to-refresh / rubber-banding while scanning at the door. */
+  overscroll-behavior-y: none;
+}
+
+@layer base {
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+
+  /* Big touch targets everywhere by default — this is a one-handed door tool. */
+  button {
+    touch-action: manipulation;
+  }
+}
