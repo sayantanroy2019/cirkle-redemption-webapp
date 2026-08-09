@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { commitCheckIn, lookupCheckIn, undoCheckIn } from '../api/checkin'
 import { errorCodeOf, isNetworkError } from '../api/client'
 import { messageForErrorCode, titleForErrorCode } from '../lib/checkInErrors'
+import { classifyScannedText } from '../lib/identifier'
 import { formatClockTime } from '../lib/format'
 import { useEventStore } from '../store/eventStore'
 import ScannerCamera from '../components/ScannerCamera'
@@ -104,7 +105,7 @@ export default function ScannerPage() {
   const handleDecode = useCallback(
     (text) => {
       if (state.phase !== 'idle') return
-      runLookup({ qrPayload: text })
+      runLookup(classifyScannedText(text))
     },
     [state.phase, runLookup],
   )
@@ -310,11 +311,6 @@ export default function ScannerPage() {
             variant="refuse"
             title={titleForErrorCode(state.errorCode)}
             subtitle={messageForErrorCode(state.errorCode, state.errorEventName)}
-            // TEMPORARY — diagnosing the scan-vs-manual-entry mismatch report.
-            // Remove this prop once that's root-caused; it's fine to show to
-            // staff (it's just their own scan echoed back) but it's debug
-            // noise, not door-screen copy.
-            debug={`code: ${state.errorCode ?? '(network error)'}\nsent: ${JSON.stringify(state.identifier)}`}
             actions={
               <button
                 onClick={handleScanNext}
