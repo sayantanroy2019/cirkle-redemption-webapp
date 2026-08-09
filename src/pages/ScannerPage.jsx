@@ -310,6 +310,11 @@ export default function ScannerPage() {
             variant="refuse"
             title={titleForErrorCode(state.errorCode)}
             subtitle={messageForErrorCode(state.errorCode, state.errorEventName)}
+            // TEMPORARY — diagnosing the scan-vs-manual-entry mismatch report.
+            // Remove this prop once that's root-caused; it's fine to show to
+            // staff (it's just their own scan echoed back) but it's debug
+            // noise, not door-screen copy.
+            debug={`code: ${state.errorCode ?? '(network error)'}\nsent: ${JSON.stringify(state.identifier)}`}
             actions={
               <button
                 onClick={handleScanNext}

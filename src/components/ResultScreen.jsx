@@ -28,7 +28,7 @@ const VARIANTS = {
 
 /** Glance-readable, full-bleed result state — color + icon carry the meaning
  *  before anyone reads a word of text. */
-export default function ResultScreen({ variant, title, subtitle, children, actions }) {
+export default function ResultScreen({ variant, title, subtitle, children, actions, debug }) {
   const { bg, icon } = VARIANTS[variant]
 
   return (
@@ -39,6 +39,12 @@ export default function ResultScreen({ variant, title, subtitle, children, actio
       <h1 className="mt-6 text-2xl font-bold tracking-tight">{title}</h1>
       {subtitle && <p className="mt-2 text-center text-base text-white/90">{subtitle}</p>}
       {children && <div className="mt-6 w-full max-w-xs">{children}</div>}
+      {/* Dev-only diagnostic — never shown in a production build. */}
+      {debug && (
+        <pre className="mt-4 w-full max-w-xs overflow-x-auto whitespace-pre-wrap rounded-lg bg-black/30 p-3 text-left font-mono text-xs text-white/80">
+          {debug}
+        </pre>
+      )}
       {actions && <div className="mt-8 w-full max-w-xs space-y-3">{actions}</div>}
     </div>
   )
