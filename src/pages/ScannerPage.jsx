@@ -16,6 +16,7 @@ const initialState = {
   identifier: null,
   attendee: null,
   admitsCount: null,
+  items: [],
   checkedInAt: null,
   status: null,
   errorCode: null,
@@ -34,6 +35,7 @@ function reducer(state, action) {
         phase: 'holder',
         attendee: action.data.attendee,
         admitsCount: action.data.admitsCount,
+        items: action.data.items ?? [],
         checkedInAt: action.data.checkedInAt,
         status: action.data.status,
       }
@@ -47,6 +49,7 @@ function reducer(state, action) {
         phase: 'admitted',
         attendee: action.data.attendee,
         admitsCount: action.data.admitsCount,
+        items: action.data.items ?? state.items,
         checkedInAt: action.data.checkedInAt,
       }
     case 'COMMIT_ALREADY':
@@ -243,6 +246,7 @@ export default function ScannerPage() {
               <HolderCard
                 attendee={state.attendee}
                 admitsCount={state.admitsCount}
+                items={state.items}
                 status={state.status}
                 checkedInAt={state.checkedInAt}
                 onCheckIn={handleCheckIn}
@@ -262,7 +266,9 @@ export default function ScannerPage() {
           <ResultScreen
             variant="admit"
             title="ADMITTED"
-            subtitle={`Admits ${state.admitsCount} ${state.admitsCount === 1 ? 'person' : 'people'} · ${state.attendee.firstName} ${state.attendee.lastName}`}
+            subtitle={`Admits ${state.admitsCount} ${state.admitsCount === 1 ? 'person' : 'people'}${
+              state.items.length > 1 ? ` (${state.items.map((i) => `${i.quantity}× ${i.categoryName}`).join(' · ')})` : ''
+            } · ${state.attendee.firstName} ${state.attendee.lastName}`}
             actions={
               <>
                 {state.undoError && (
