@@ -1,7 +1,7 @@
 import Avatar from './Avatar'
 import { formatClockTime } from '../lib/format'
 
-export default function HolderCard({ attendee, admitsCount, status, checkedInAt, onCheckIn, committing }) {
+export default function HolderCard({ attendee, admitsCount, items = [], status, checkedInAt, onCheckIn, committing }) {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
       <div className="flex justify-center">
@@ -16,6 +16,20 @@ export default function HolderCard({ attendee, admitsCount, status, checkedInAt,
       <div className="mt-4 inline-flex items-center rounded-full bg-brand-light px-4 py-1.5 text-sm font-semibold text-brand-dark">
         Admits {admitsCount} {admitsCount === 1 ? 'person' : 'people'}
       </div>
+
+      {/* What the booking is made of, so staff can count heads against it:
+          "2× Couple Pass · 1× Stag". A single-line booking still lists its one line. */}
+      {items.length > 0 && (
+        <ul className="mt-3 space-y-1 text-sm text-gray-700">
+          {items.map((item) => (
+            <li key={item.categoryName} className="flex items-center justify-center gap-2">
+              <span className="font-semibold">{item.quantity}×</span>
+              <span>{item.categoryName}</span>
+              <span className="text-gray-400">· admits {item.admitsTotal}</span>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <div className="mt-6">
         {status === 'not_checked_in' ? (
